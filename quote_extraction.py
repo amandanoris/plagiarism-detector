@@ -33,19 +33,3 @@ def citation_check(doc1, doc1_title, doc2, doc2_title):
     doc2_references = sorted([(cita, similitud) for cita, similitud in doc2_quotes.items() if similitud >=  0.9], key=lambda x: x[1], reverse=True)
     
     return doc1_references, doc2_references
-
-doc1 = "el perro come [3] huesos  [3] dd"
-doc2 = "'la vida de los gatos' y 'el perro'"
-doc1_title = "la vida de los gatos"
-doc2_title = "dd"
-
-doc1_references, doc2_references = citation_check(doc1, doc1_title, doc2, doc2_title)
-
-if doc1_references and not doc2_references:
-    message = f"El documento {doc1_title} referencia al otro en estas citas: {doc1_references}"
-elif doc1_references and doc2_references:
-    message = f"El documento {doc1_title} referencia al otro en estas citas: {doc1_references} y el documento {doc2_title} referencia al otro en estas citas: {doc2_references}"
-else:
-    message = "Ningún documento referencia al otro."
-
-print(message)
