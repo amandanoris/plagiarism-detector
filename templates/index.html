@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detector de Plagio</title>
+    <!-- Añade Bootstrap CSS para usar sus estilos predefinidos -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Añade estilos personalizados -->
+    <style>
+        .file-input {
+            margin-bottom:   1rem;
+        }
+        .result-area {
+            width:   100%; /* Ajusta el ancho al   100% del contenedor */
+            overflow-x: auto; /* Habilita el desplazamiento horizontal si el contenido es demasiado ancho */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Subir archivos</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div class="row"> <!-- Bootstrap Row -->
+                <div class="col-md-6"> <!-- Bootstrap Column -->
+                    Archivo   1: <input type="file" class="file-input" name="doc1"><br>
+                </div>
+                <div class="col-md-6"> <!-- Bootstrap Column -->
+                    Archivo   2: <input type="file" class="file-input" name="doc2"><br>
+                </div>
+            </div>
+            <input type="submit" value="Subir archivos" class="btn btn-primary">
+        </form>
+
+        <div class="result-area"> <!-- Área de resultados -->
+            {% if lexical_similarity %}
+            <h3>Similitud léxica entre los documentos: {{ lexical_similarity }}</h3>
+            {% endif %}
+
+            {% if semantic_similarity %}
+            <h3>Similitud semántica entre los documentos: {{ semantic_similarity }}</h3>
+            {% endif %}
+
+            {% if plagiarism_segments %}
+            <h2>Resultados de la detección de plagio:</h2>
+            <ul class="list-group">
+                {% for segment1, segment2, similarity in plagiarism_segments %}
+                <li class="list-group-item">
+                    Segmento del documento   1: {{ segment1 }}<br>
+                    Segmento del documento   2: {{ segment2 }}<br>
+                    Similitud semántica: {{ similarity }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No se detectó plagio.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Añade jQuery y Bootstrap JS para que los componentes de Bootstrap funcionen correctamente -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
