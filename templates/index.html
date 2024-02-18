@@ -2,16 +2,14 @@
 <html>
 <head>
     <title>Detector de Plagio</title>
-    <!-- Añade Bootstrap CSS para usar sus estilos predefinidos -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Añade estilos personalizados -->
     <style>
         .file-input {
             margin-bottom:   1rem;
         }
         .result-area {
-            width:   100%; /* Ajusta el ancho al   100% del contenedor */
-            overflow-x: auto; /* Habilita el desplazamiento horizontal si el contenido es demasiado ancho */
+            width:   100%;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -19,18 +17,40 @@
     <div class="container">
         <h2>Subir archivos</h2>
         <form action="/" method="post" enctype="multipart/form-data">
-            <div class="row"> <!-- Bootstrap Row -->
-                <div class="col-md-6"> <!-- Bootstrap Column -->
+            <div class="row">
+                <div class="col-md-6">
                     Archivo   1: <input type="file" class="file-input" name="doc1"><br>
                 </div>
-                <div class="col-md-6"> <!-- Bootstrap Column -->
+                <div class="col-md-6">
                     Archivo   2: <input type="file" class="file-input" name="doc2"><br>
                 </div>
             </div>
             <input type="submit" value="Subir archivos" class="btn btn-primary">
         </form>
 
-        <div class="result-area"> <!-- Área de resultados -->
+        <div class="result-area">
+            {% if doc1_references or doc2_references %}
+                {% if doc1_references %}
+                <h3>Posibles citas en el documento {{ doc1_name }}:</h3>
+                <ul class="list-group">
+                    {% for reference in doc1_references %}
+                    <li class="list-group-item">{{ reference }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if doc2_references %}
+                <h3>Posibles citas en el documento {{ doc2_name }}:</h3>
+                <ul class="list-group">
+                    {% for reference in doc2_references %}
+                    <li class="list-group-item">{{ reference }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% else %}
+                <p>No se detectaron referencias entre los documentos.</p>
+            {% endif %}
+
             {% if lexical_similarity %}
             <h3>Similitud léxica entre los documentos: {{ lexical_similarity }}</h3>
             {% endif %}
@@ -56,7 +76,6 @@
         </div>
     </div>
 
-    <!-- Añade jQuery y Bootstrap JS para que los componentes de Bootstrap funcionen correctamente -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 </body>
