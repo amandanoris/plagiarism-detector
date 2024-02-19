@@ -8,6 +8,19 @@ nlp = spacy.load('en_core_web_sm')
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 model = BertModel.from_pretrained('bert-base-uncased')
 
+class SemanticVectorizer:
+    def __init__(self):
+        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        self.model = BertModel.from_pretrained('bert-base-uncased')
+
+    def vectorize(self, text):
+        # Tokenizar y vectorizar el texto usando BERT
+        input_ids = self.tokenizer.encode(text, add_special_tokens=True)
+        input_ids = torch.tensor([input_ids])
+        with torch.no_grad():
+            last_hidden_states = self.model(input_ids)[0]
+        return last_hidden_states[0].mean(dim=0).numpy()
+
 class PlagiarismDetector:
     def __init__(self, preprocessor):
         self.preprocessor = preprocessor

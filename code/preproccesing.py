@@ -52,3 +52,7 @@ class TextPreprocessor:
         def replace(match):
             return contractions_dict[match.group(0)]
         return self.contractions_re.sub(replace, text)
+
+    def tokenize_text(self, text):
+        tokens = self.tokenize(text)
+        return tokens
