@@ -1,28 +1,19 @@
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import stopwords
+from preproccesing import TextPreprocessor
 
-lemmatizer = WordNetLemmatizer()
-stop_words = set(stopwords.words('english'))
-
-def preprocess_text(text):
-    tokens = word_tokenize(text)
-    tokens = [token.lower() for token in tokens if token.isalpha()]
-    tokens = [token for token in tokens if token not in stop_words]
-    tokens = [lemmatizer.lemmatize(token) for token in tokens]
-    return tokens
+# Crear una instancia de TextPreprocessor
+preprocessor = TextPreprocessor(language='english')
 
 def train_word2vec(texts, vector_size=100, window_size=5, min_count=1, epochs=10):
-    processed_texts = [preprocess_text(text) for text in texts]
+    processed_texts = [preprocessor.tokenize_text(text) for text in texts]
     model = Word2Vec(processed_texts, vector_size=vector_size, window=window_size, min_count=min_count, epochs=epochs)
     return model
 
 def get_document_vector(model, document):
-    processed_document = preprocess_text(document)
+    processed_document = preprocessor.tokenize_text(document)
     document_vector = sum([model.wv[word] for word in processed_document])
-    return document_vector / len(processed_document)  
+    return document_vector / len(processed_document)    
 
 def semantic_similarity(model, document1, document2):
     vector1 = get_document_vector(model, document1)

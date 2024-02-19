@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify, render_template
-from Procesamiento import PlagiarismDetector
-from Procesamiento import TextPreprocessor
-from lexical_similarity import calcular_similitud_coseno
-from semantic_similarity import calcular_similitud_semantica
-from quote_extraction import citation_check
+from ..code.segmentation import PlagiarismDetector
+from ..code.preproccesing import TextPreprocessor
+from ..code.lexical_similarity import calcular_similitud_coseno
+from ..code.semantic_similarity import calcular_similitud_semantica
+from ..code.quote_extraction import citation_check
 from pathlib import Path
 
 app = Flask(__name__)
@@ -29,9 +29,12 @@ def index():
         doc1_name=Path(doc1.filename).stem
         doc2_name=Path(doc2.filename).stem
 
+        preprocessed_doc1 = preprocessor.preprocess(doc1_content)
+        preprocessed_doc2 = preprocessor.preprocess(doc2_content)
+
         lexical_similarity = calcular_similitud_coseno(doc1_content, doc2_content)
-        semantic_similarity = calcular_similitud_semantica(doc1_content, doc2_content)
-        plagiarism_segments = detector.detect_plagiarism(doc1_content, doc2_content)
+        semantic_similarity = calcular_similitud_semantica(preprocessed_doc1, preprocessed_doc2)
+        plagiarism_segments = detector.detect_plagiarism( doc1_content, doc2_content)
         doc1_references, doc2_references = citation_check(doc1_content, doc1_name, doc2_content, doc2_name)
         
         return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity = semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name)
