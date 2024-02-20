@@ -1,6 +1,6 @@
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
-from preproccesing import TextPreprocessor
+from .preproccesing import TextPreprocessor
 
 # Crear una instancia de TextPreprocessor
 preprocessor = TextPreprocessor(language='english')

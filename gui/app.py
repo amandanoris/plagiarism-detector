@@ -1,18 +1,17 @@
-from flask import Flask, request, jsonify, render_template
-from ..code.segmentation import PlagiarismDetector
-from ..code.preproccesing import TextPreprocessor
-from ..code.lexical_similarity import calcular_similitud_coseno
-from ..code.semantic_similarity import calcular_similitud_semantica
-from ..code.quote_extraction import citation_check
+from flask import Blueprint, request, jsonify, render_template
 from pathlib import Path
 
-app = Flask(__name__)
-
-preprocessor = TextPreprocessor()
-detector = PlagiarismDetector(preprocessor)
+app = Blueprint('gui', __name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    
+    preprocessor = app.preprocessor
+    detector = app.detector
+    calcular_similitud_coseno = app.calcular_similitud_coseno
+    calcular_similitud_semantica = app.calcular_similitud_semantica
+    citation_check = app.citation_check
+
     if request.method == 'POST':
         doc1 = request.files.get('doc1')
         doc2 = request.files.get('doc2')
@@ -34,12 +33,9 @@ def index():
 
         lexical_similarity = calcular_similitud_coseno(doc1_content, doc2_content)
         semantic_similarity = calcular_similitud_semantica(preprocessed_doc1, preprocessed_doc2)
-        plagiarism_segments = detector.detect_plagiarism( doc1_content, doc2_content)
+        plagiarism_segments = detector.detect_plagiarism(doc1_content, doc2_content)
         doc1_references, doc2_references = citation_check(doc1_content, doc1_name, doc2_content, doc2_name)
         
-        return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity = semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name)
+        return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity=semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name)
     else:
         return render_template('index.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
