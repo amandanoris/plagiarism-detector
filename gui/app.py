@@ -11,6 +11,8 @@ def index():
     calcular_similitud_coseno = app.calcular_similitud_coseno
     calcular_similitud_semantica = app.calcular_similitud_semantica
     citation_check = app.citation_check
+    read_file = app.read_file
+    show = app.show
 
     if request.method == 'POST':
         doc1 = request.files.get('doc1')
@@ -22,8 +24,8 @@ def index():
         if doc1.filename == '' or doc2.filename == '':
             return jsonify({'error': 'No se seleccionó ningún archivo'}),   
         
-        doc1_content = doc1.read().decode('utf-8')
-        doc2_content = doc2.read().decode('utf-8')
+        doc1_content = read_file(doc1)
+        doc2_content = read_file(doc2)
 
         doc1_name=Path(doc1.filename).stem
         doc2_name=Path(doc2.filename).stem
@@ -31,11 +33,15 @@ def index():
         preprocessed_doc1 = preprocessor.preprocess(doc1_content)
         preprocessed_doc2 = preprocessor.preprocess(doc2_content)
 
+        show(doc1_content, doc1_name)
+        show(doc2_content, doc2_name)
+
         lexical_similarity = calcular_similitud_coseno(doc1_content, doc2_content)
         semantic_similarity = calcular_similitud_semantica(preprocessed_doc1, preprocessed_doc2)
         plagiarism_segments = detector.detect_plagiarism(doc1_content, doc2_content)
         doc1_references, doc2_references = citation_check(doc1_content, doc1_name, doc2_content, doc2_name)
         
-        return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity=semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name)
+        
+        return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity=semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name) 
     else:
         return render_template('index.html')

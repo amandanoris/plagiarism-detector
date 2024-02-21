@@ -14,3 +14,20 @@ def calcular_similitud_coseno(doc1_content, doc2_content):
   
     return similitud_coseno
 
+import os
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+def show(document, filename):
+
+    wordcloud = WordCloud(width =   800, height =   800,
+                    background_color ='white',
+                    min_font_size =   10).generate(document)
+
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+
+    # Guarda la imagen en una carpeta estática
+    os.makedirs('static/images', exist_ok=True)
+    plt.savefig(f'static/images/{filename}.png')
+    plt.close()

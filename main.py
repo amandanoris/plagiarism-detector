@@ -7,6 +7,8 @@ from back.preproccesing import TextPreprocessor
 from back.lexical_similarity import calcular_similitud_coseno
 from back.semantic_similarity import calcular_similitud_semantica
 from back.quote_extraction import citation_check
+from back.reading_tools import read_file
+from back.lexical_similarity import show
 
 
 # Inicializa los módulos necesarios
@@ -23,6 +25,8 @@ gui_app.detector = detector
 gui_app.calcular_similitud_coseno = calcular_similitud_coseno
 gui_app.calcular_similitud_semantica = calcular_similitud_semantica
 gui_app.citation_check = citation_check
+gui_app.read_file = read_file
+gui_app.show = show
 
 if __name__ == '__main__':
     app.run(debug=True)
