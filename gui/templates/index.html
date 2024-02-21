@@ -2,8 +2,18 @@
 <html>
 <head>
     <title>Detector de Plagio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
+            .image {
+        width:  100%; /* Adjust as needed */
+        max-width:  300px; /* Adjust as needed */
+    }
+        #similarityChart {
+    max-width: 300px;
+    max-height: 300px;
+}
+
         .file-input {
             margin-bottom:   1rem;
         }
@@ -11,7 +21,15 @@
             width:   100%;
             overflow-x: auto;
         }
+        /* Estilos adicionales para personalizar la apariencia */
+        .card {
+            margin-bottom:  1.5rem;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -31,7 +49,7 @@
         <div class="result-area">
             {% if doc1_references or doc2_references %}
                 {% if doc1_references %}
-                <h3>Posibles citas en el documento {{ doc1_name }}:</h3>
+                <h3>Posibles citas en el documento "{{ doc1_name }}" :</h3>
                 <ul class="list-group">
                     {% for reference in doc1_references %}
                     <li class="list-group-item">{{ reference }}</li>
@@ -40,7 +58,7 @@
                 {% endif %}
 
                 {% if doc2_references %}
-                <h3>Posibles citas en el documento {{ doc2_name }}:</h3>
+                <h3>Posibles citas en el documento "{{ doc2_name }}" :</h3>
                 <ul class="list-group">
                     {% for reference in doc2_references %}
                     <li class="list-group-item">{{ reference }}</li>
@@ -52,11 +70,28 @@
             {% endif %}
 
             {% if lexical_similarity %}
-            <h3>Similitud léxica entre los documentos: {{ lexical_similarity }}</h3>
+            <h3>Similitud léxica entre los documentos: {{ lexical_similarity *100}}  %</h3>
+            
+            <!-- Add the images here -->
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{{ url_for('static', filename='images/' + doc1_name + '.png') }}" alt="Nube de palabras del documento   1" class="image">
+                    <p>{doc1_name}</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="{{ url_for('static', filename='images/' + doc2_name + '.png') }}" alt="Nube de palabras del documento   2" class="image">
+                    <p>{doc2_name}</p>
+                </div>
+            </div>
             {% endif %}
+            
+            
+            
 
             {% if semantic_similarity %}
-            <h3>Similitud semántica entre los documentos: {{ semantic_similarity }}</h3>
+            <h3>Similitud semántica entre los documentos:{{ semantic_similarity *100}}  % </h3>
+            <canvas id="similarityChart" width="30" height="30"></canvas>
+          
             {% endif %}
 
             {% if plagiarism_segments %}
@@ -79,4 +114,43 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 </body>
+
+<script>
+    // Obtén el contexto del canvas donde se dibujará el gráfico
+    var ctx = document.getElementById('similarityChart').getContext('2d');
+
+
+    
+    // Crea un nuevo gráfico de dona
+    var chart = new Chart(ctx, {
+        type: 'doughnut', // Tipo de gráfico: dona
+        data: {
+            labels: ['Similitud', 'Diferencia'], // Etiquetas para la dona
+            datasets: [{
+                data: [{{ semantic_similarity }} *  100,  100 - {{ semantic_similarity }} *  100], // Valores para la dona: similitud y diferencia
+                backgroundColor: [
+                    'rgba(75,  192,  192,  0.2)', // Color para la similitud
+                    'rgba(255,  99,  132,  0.2)' // Color para la diferencia
+                ],
+                borderColor: [
+                    'rgba(75,  192,  192,  1)', // Color del borde para la similitud
+                    'rgba(255,  99,  132,  1)' // Color del borde para la diferencia
+                ],
+                borderWidth:  1
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+
+        }
+    });
+    </script>
+    
 </html>

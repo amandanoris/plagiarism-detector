@@ -1,5 +1,5 @@
 import re
-from lexical_similarity import calcular_similitud_coseno
+from .lexical_similarity import calcular_similitud_coseno
 
 def extract_quotes(text):
     pattern = r'"([^"\\]*(\\.[^"\\]*)*)"|\'([^\'\\]*(\\.[^\'\\]*)*)\'|\(([^)]*)\)'
