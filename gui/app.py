@@ -31,10 +31,10 @@ def index():
         doc2 = request.files.get('doc2')
         
         if not doc1 or not doc2:
-            return jsonify({'error': 'Faltan los documentos para comparar'}),
+            return jsonify({'error': 'Faltan los documentos para comparar'})
        
         if doc1.filename == '' or doc2.filename == '':
-            return jsonify({'error': 'No se seleccionó ningún archivo'}),
+            return jsonify({'error': 'No se seleccionó ningún archivo'})
         
         doc1_content = read_file(doc1)
         doc2_content = read_file(doc2)
