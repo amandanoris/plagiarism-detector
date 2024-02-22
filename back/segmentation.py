@@ -11,7 +11,7 @@ class SemanticVectorizer:
         self.model = BertModel.from_pretrained('bert-base-uncased')
 
     def vectorize(self, text):
-        # Tokenizar y vectorizar el texto usando BERT
+ 
         input_ids = self.tokenizer.encode(text, add_special_tokens=True)
         input_ids = torch.tensor([input_ids])
         with torch.no_grad():

@@ -14,7 +14,7 @@ def extract_cites(text):
     for num, cite in matches:
         if int(num) not in cite_dict:
             cite_dict[int(num)] = cite.strip()
-    # Convertir los valores del diccionario a una lista
+  
     cites_list = list(cite_dict.values())
     return cites_list
 

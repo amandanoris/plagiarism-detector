@@ -21,7 +21,6 @@ def show(document, filename):
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
 
-    # Guarda la imagen en una carpeta estática
     os.makedirs('static/images', exist_ok=True)
     plt.savefig(f'static/images/{filename}.png')
     plt.close()
