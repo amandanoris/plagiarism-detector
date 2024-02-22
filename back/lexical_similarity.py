@@ -4,16 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 def calcular_similitud_coseno(doc1_content, doc2_content):
   
     vectorizer = TfidfVectorizer()
-
-   
     vectores = vectorizer.fit_transform([doc1_content, doc2_content])
-
-  
     similitud_coseno = cosine_similarity(vectores[0:1], vectores[1:2])[0][0]
-
-    if (similitud_coseno <= 0) : similitud_coseno = "Nula"
-
-  
     return similitud_coseno
 
 import os
@@ -29,7 +21,6 @@ def show(document, filename):
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
 
-    # Guarda la imagen en una carpeta estática
     os.makedirs('static/images', exist_ok=True)
     plt.savefig(f'static/images/{filename}.png')
     plt.close()

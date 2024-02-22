@@ -51,85 +51,87 @@
             </div>
         </div>
 
-        <!-- Línea divisoria -->
-        <hr>
+        {% if has_contents %}
+            <!-- Línea divisoria -->
+            <hr>
 
-        <!-- Sección de resultados -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Resultados</h2>
-            </div>
-            <div class="card-body">
-                {% if doc1_references or doc2_references %}
-                    {% if doc1_references %}
-                    <h3>Posibles citas en el documento "{{ doc1_name }}" :</h3>
-                    <ul class="list-group">
-                        {% for reference in doc1_references %}
-                        <li class="list-group-item">{{ reference }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-
-                    {% if doc2_references %}
-                    <h3>Posibles citas en el documento "{{ doc2_name }}" :</h3>
-                    <ul class="list-group">
-                        {% for reference in doc2_references %}
-                        <li class="list-group-item">{{ reference }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                {% else %}
-                    <p>No se detectaron referencias entre los documentos.</p>
-                {% endif %}
-
-                {% if lexical_similarity != "Nula" %}
-                <h3>Similitud léxica entre los documentos: {{ lexical_similarity *100}}  %</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="{{ url_for('static', filename='images/' + doc1_name + '.png') }}" alt="Nube de palabras del documento   1" class="image">
-                        <p>{{doc1_name}}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <img src="{{ url_for('static', filename='images/' + doc2_name + '.png') }}" alt="Nube de palabras del documento   2" class="image">
-                        <p>{{doc2_name}}</p>
-                    </div>
+            <!-- Sección de resultados -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Resultados</h2>
                 </div>
-                {% else %}
-                <p>No existe similitud léxica entre los documentos.</p>
-                {% endif %}
+                <div class="card-body">
+                    {% if doc1_references or doc2_references %}
+                        {% if doc1_references %}
+                        <h3>Posibles citas en el documento "{{ doc1_name }}" :</h3>
+                        <ul class="list-group">
+                            {% for reference in doc1_references %}
+                            <li class="list-group-item">{{ reference }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
 
-                {% if semantic_similarity != "Nula" %}
-                <h3>Similitud semántica entre los documentos:{{ semantic_similarity *100}}  % </h3>
-                <canvas id="similarityChart" width="30" height="30"></canvas>
-                {% else %}
-                <p>No existe similitud semántica entre los documentos.</p>
-                {% endif %}
+                        {% if doc2_references %}
+                        <h3>Posibles citas en el documento "{{ doc2_name }}" :</h3>
+                        <ul class="list-group">
+                            {% for reference in doc2_references %}
+                            <li class="list-group-item">{{ reference }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% else %}
+                        <p>No se detectaron referencias entre los documentos.</p>
+                    {% endif %}
 
-                {% if plagiarism_segments %}
-                <h2>Estos son los segmentos con mayores probabilidades de plagio:</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Segmento del documento   1</th>
-                            <th>Segmento del documento   2</th>
-                            <th>Similitud semántica</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for segment1, segment2, similarity in plagiarism_segments %}
-                        <tr>
-                            <td>{{ segment1 }}</td>
-                            <td>{{ segment2 }}</td>
-                            <td>{{ similarity }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p>No se detectó plagio.</p>
-                {% endif %}
+                    {% if lexical_similarity != "Nula" %}
+                    <h3>Similitud léxica entre los documentos: {{ lexical_similarity *100}}  %</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="{{ url_for('static', filename='images/' + doc1_name + '.png') }}" alt="Nube de palabras del documento   1" class="image">
+                            <p>{{doc1_name}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="{{ url_for('static', filename='images/' + doc2_name + '.png') }}" alt="Nube de palabras del documento   2" class="image">
+                            <p>{{doc2_name}}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>No existe similitud léxica entre los documentos.</p>
+                    {% endif %}
+
+                    {% if semantic_similarity != "Nula" %}
+                    <h3>Similitud semántica entre los documentos:{{ semantic_similarity *100}}  % </h3>
+                    <canvas id="similarityChart" width="30" height="30"></canvas>
+                    {% else %}
+                    <p>No existe similitud semántica entre los documentos.</p>
+                    {% endif %}
+
+                    {% if plagiarism_segments %}
+                    <h2>Estos son los segmentos con mayores probabilidades de plagio:</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Segmento del documento   1</th>
+                                <th>Segmento del documento   2</th>
+                                <th>Probabilidad de plagio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for segment1, segment2, similarity in plagiarism_segments %}
+                            <tr>
+                                <td>{{ segment1 }}</td>
+                                <td>{{ segment2 }}</td>
+                                <td>{{ similarity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No se detectó plagio.</p>
+                    {% endif %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

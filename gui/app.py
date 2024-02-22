@@ -42,6 +42,6 @@ def index():
         doc1_references, doc2_references = citation_check(doc1_content, doc1_name, doc2_content, doc2_name)
         
         
-        return render_template('index.html', plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity=semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name) 
+        return render_template('index.html', has_contents = True, plagiarism_segments=plagiarism_segments, lexical_similarity=lexical_similarity, semantic_similarity=semantic_similarity, doc1_references=doc1_references, doc2_references=doc2_references, doc1_name=doc1_name, doc2_name=doc2_name) 
     else:
-        return render_template('index.html')
+        return render_template('index.html', has_contents = False)
