@@ -107,15 +107,24 @@
 
                 {% if plagiarism_segments %}
                 <h2>Estos son los segmentos con mayores probabilidades de plagio:</h2>
-                <ul class="list-group">
-                    {% for segment1, segment2, similarity in plagiarism_segments %}
-                    <li class="list-group-item">
-                        Segmento del documento   1: {{ segment1 }}<br>
-                        Segmento del documento   2: {{ segment2 }}<br>
-                        Similitud semántica: {{ similarity }}
-                    </li>
-                    {% endfor %}
-                </ul>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Segmento del documento   1</th>
+                            <th>Segmento del documento   2</th>
+                            <th>Similitud semántica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for segment1, segment2, similarity in plagiarism_segments %}
+                        <tr>
+                            <td>{{ segment1 }}</td>
+                            <td>{{ segment2 }}</td>
+                            <td>{{ similarity }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 {% else %}
                 <p>No se detectó plagio.</p>
                 {% endif %}
